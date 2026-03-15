@@ -48,7 +48,7 @@ Prawn::Document.generate("Nicolas_Vandenbogaerde_CV_Complete_Final.pdf") do
     {
       company: "Mipise (France)", period: "Jan 2022 – Mar 2025", title: "Lead Backend Engineer",
       details: [
-        "Led development of real estate investment platform and crypto infrastructure on Tezos blockchain, enabling €3M funding round",
+        "Lead development of real estate investment platform and crypto infrastructure on Tezos blockchain, enabling €3M funding round",
         "Optimized code performance and readability, enabling faster feature deployment",
         "Developed Ruby gems integrating with Lemonway payment APIs, automating payment flows",
         "Migrated legacy jQuery frontend to modern ES6 / React",
