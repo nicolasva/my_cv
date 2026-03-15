@@ -13,7 +13,7 @@ Prawn::Document.generate("Nicolas_Vandenbogaerde_CV_Complete_Final.pdf") do
   text "Nicolas VANDENBOGAERDE", size: 30, style: :bold
   fill_color "000000"
   move_down 5
-  text "Senior Ruby / Rails Engineer | Microservices | Open Source Contributor | International Experience", size: 12
+  text "Senior Ruby / Rails Engineer | Microservices Architect | AI & LLM Integration | Open Source Contributor | International Experience", size: 12
   move_down 10
   text "\u260E 07 66 44 15 16   |   \u2709 nicolas.vandenbogaerde@gmail.com", size: 10
   text "\u25C8 GitHub: https://github.com/nicolasva   |   LinkedIn: https://www.linkedin.com/in/vandenbogaerde-nicolas-86451b78", size: 10
