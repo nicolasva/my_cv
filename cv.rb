@@ -20,30 +20,45 @@ Prawn::Document.generate("Nicolas_Vandenbogaerde_CV_Complete_Final.pdf") do
   move_down 15
 
   # ---------- TECHNICAL SKILLS ----------
-  fill_color "EAF2FB"
-  fill_rectangle [0, cursor], bounds.width, 130
-  fill_color "0B3D91"
-  text "\u2699 Technical Skills", size: 18, style: :bold
-  fill_color "000000"
-  move_down 5
-  table([
+  skills_data = [
     ["Languages", "Ruby, Ruby on Rails, Node.js, JavaScript (ES6, Backbone.js, React), Java, C/C++, PHP, VBScript, Shell scripting, HTML/CSS/SCSS"],
     ["Frameworks", "Rails, Sinatra, Phoenix, React, AngularJS, Backbone.js, Shoes, CoffeeScript, Prototype, Android SDK"],
     ["Databases", "MySQL, PostgreSQL, Oracle, SQLite, CouchDB"],
     ["Tools / DevOps", "Git, Docker, Kubernetes, CircleCI, Codeship, Capistrano, Apache, Sage"],
     ["Open Source", "Rails, Redis, RuboCop, RSpec, 2D Ruby SVG engine (Tharsis Software) https://github.com/nicolasva/2DMotor"]
-  ], cell_style: { borders: [], padding: [2,5,2,5] })
-  move_down 15
+  ]
+  skills_table = make_table(skills_data, cell_style: { borders: [], padding: [2,5,2,5] })
+  skills_h = 25 + 5 + skills_table.height + 5
+  fill_color "EAF2FB"
+  fill_rectangle [0, cursor], bounds.width, skills_h
+  fill_color "0B3D91"
+  text "\u2699 Technical Skills", size: 18, style: :bold
+  fill_color "000000"
+  move_down 5
+  skills_table.draw
+  move_down 12
+  stroke_color "0B3D91"
+  stroke_horizontal_rule
+  move_down 12
 
   # ---------- PROFESSIONAL EXPERIENCE ----------
   fill_color "EAF2FB"
-  fill_rectangle [0, cursor], bounds.width, 900
+  fill_rectangle [0, cursor], bounds.width, 25
   fill_color "0B3D91"
   text "\u2605 Professional Experience", size: 18, style: :bold
   fill_color "000000"
   move_down 5
 
   experiences = [
+    # -------- Gîtes bretagne --------
+    {
+      company: "Gîtes Bretagne", period: "Mars 2025 - présent", title: "Fondateur & Gérant",
+      details: [
+        "Création et gestion complète d’une entreprise de location de gîtes, de la conception produit à la gestion opérationnelle",
+        "Optimisation de l’expérience client et des processus internes, automatisation des opérations",
+        "Développement des compétences en leadership, organisation, product management et prise de décision stratégique"
+      ]
+    },
     # -------- Mipise --------
     {
       company: "Mipise (France)", period: "Jan 2022 – Mar 2025", title: "Lead Backend Engineer",
@@ -174,50 +189,81 @@ Prawn::Document.generate("Nicolas_Vandenbogaerde_CV_Complete_Final.pdf") do
   ]
 
   experiences.each do |exp|
+    title_text = "#{exp[:title]} — #{exp[:company]} | #{exp[:period]}"
+    details_text = exp[:details].map { |d| "• #{d}" }.join("\n")
+
+    title_h = height_of(title_text, size: 12) + 4
+    details_h = height_of(details_text, size: 10) + 10
+    total_h = title_h + details_h
+
+    # Start new page if not enough room
+    start_new_page if cursor < total_h + 10
+
+    # Light blue background for the whole entry
+    fill_color "EAF2FB"
+    fill_rectangle [0, cursor], bounds.width, total_h
+
+    # Darker blue background for title line
     fill_color "DCECFB"
-    fill_rectangle [0, cursor], bounds.width, 20
+    fill_rectangle [0, cursor], bounds.width, title_h
+
     fill_color "0B3D91"
-    text "#{exp[:title]} — #{exp[:company]} | #{exp[:period]}", size: 12, style: :bold
+    text title_text, size: 12, style: :bold
     fill_color "000000"
     move_down 2
     exp[:details].each do |d|
       text "• #{d}", size: 10, indent_paragraphs: 10
     end
-    move_down 8
+    move_down 6
   end
 
+  # Separator
+  stroke_color "0B3D91"
+  stroke_horizontal_rule
+  move_down 10
+
   # ---------- EDUCATION ----------
+  edu_h = 25 + 3 + (3 * 14) + 3
   fill_color "EAF2FB"
-  fill_rectangle [0, cursor], bounds.width, 70
+  fill_rectangle [0, cursor], bounds.width, edu_h
   fill_color "0B3D91"
   text "\u2666 Education", size: 18, style: :bold
   fill_color "000000"
-  move_down 5
+  move_down 3
   text "INSIA / INGESUP – Computer Science (2006–2008)", size: 10
   text "BTS Informatique de Gestion – Network Option (2006)", size: 10
   text "Baccalauréat STI Électronique (2004)", size: 10
-  move_down 10
+  move_down 12
+  stroke_color "0B3D91"
+  stroke_horizontal_rule
+  move_down 12
 
   # ---------- PUBLICATIONS & OSS ----------
+  oss_text = "• Rails, RSpec, RuboCop, Redis contributions (https://github.com/nicolasva)\n• Open-sourced 2D Ruby SVG engine for interactive floor plans: https://github.com/nicolasva/2DMotor\n• Featured in US journal\n• LinkedIn posts by Rails Fundation / Open source PRs : https://www.linkedin.com/posts/ruby-on-rails-org_this-week-in-rails-action-texts-markdown-activity-7438185378097856512-F1T7/"
+  oss_h = 25 + 3 + height_of(oss_text, size: 10) + 5
   fill_color "EAF2FB"
-  fill_rectangle [0, cursor], bounds.width, 100
+  fill_rectangle [0, cursor], bounds.width, oss_h
   fill_color "0B3D91"
   text "\u270E Open Source Contributions & Publications", size: 18, style: :bold
   fill_color "000000"
-  move_down 5
+  move_down 3
   text "• Rails, RSpec, RuboCop, Redis contributions (https://github.com/nicolasva)", size: 10
   text "• Open-sourced 2D Ruby SVG engine for interactive floor plans: https://github.com/nicolasva/2DMotor", size: 10
   text "• Featured in US journal", size: 10
   text "• LinkedIn posts by Rails Fundation / Open source PRs : https://www.linkedin.com/posts/ruby-on-rails-org_this-week-in-rails-action-texts-markdown-activity-7438185378097856512-F1T7/", size: 10
-  move_down 10
+  move_down 12
+  stroke_color "0B3D91"
+  stroke_horizontal_rule
+  move_down 12
 
   # ---------- LANGUAGES ----------
+  lang_h = 25 + 3 + (2 * 14) + 3
   fill_color "EAF2FB"
-  fill_rectangle [0, cursor], bounds.width, 40
+  fill_rectangle [0, cursor], bounds.width, lang_h
   fill_color "0B3D91"
   text "\u25C6 Languages", size: 18, style: :bold
   fill_color "000000"
-  move_down 5
+  move_down 3
   text "French: Native", size: 10
   text "English: Professional", size: 10
 end
